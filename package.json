@@ -1,0 +1,20 @@
+{
+  "name": "eadmin-sync",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/bin/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Kim Nerli",
+  "license": "MIT",
+  "dependencies": {
+    "activedirectory2": "^2.1.0",
+    "dotenv": "^8.2.0",
+    "ldapjs": "^2.2.4",
+    "mongoose": "^5.12.3",
+    "mssql": "^6.3.1",
+    "node-cron": "^3.0.0",
+    "tui-jsdoc-template": "^1.2.2"
+  }
+}

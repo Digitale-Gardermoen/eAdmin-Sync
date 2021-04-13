@@ -102,3 +102,7 @@ dist
 
 # TernJS port file
 .tern-port
+
+# Documentation folder
+out/
+src/config/SyncConfig.json
