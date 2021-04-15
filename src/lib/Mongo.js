@@ -72,12 +72,6 @@ class MongoDB {
       'sLoginID': { $nin: arr }
     });
   }
-
-  disconnectdb() {
-    mongoose.disconnect();
-    return;
-  }
-
 }
 
 module.exports = MongoDB;
