@@ -8,9 +8,8 @@ class LdapClient {
       url: [ config.ldapUrl ]
     });
 
-    this.client.on('error', () => console.error);
-
-    this.client.bind(config.ldapUsername, config.ldapPassword, (err) => console.error(err));
+    this.client.on('error', (err) => { if (err) console.error(err); });
+    this.client.bind(config.ldapUsername, config.ldapPassword, (err) => { if (err) console.error(err); });
   }
 
   add(name, entry) {
@@ -35,6 +34,20 @@ class LdapClient {
     return new ldap.Change({
       operation,
       modification
+    });
+  }
+
+  search(base, options) {
+    return new Promise((res, rej) => {
+      let data = [];
+
+      this.client.search(base, options, (error, emitter) => {
+        if (error) rej(error);
+
+        emitter.on('searchEntry', (entry) => data.push(entry.object));
+        emitter.on('error', (err) => rej(err));
+        emitter.on('end', (result) => { if (result.status == 0) res(data); });
+      });
     });
   }
 }

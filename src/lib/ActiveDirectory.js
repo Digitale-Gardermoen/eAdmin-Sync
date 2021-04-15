@@ -1,23 +1,7 @@
 'use strict';
-const ActiveDirectory = require('activedirectory2').promiseWrapper;
 const LdapClient = require('../api/LdapClient');
 const Mongo = require('./Mongo');
 const config = require('../config/Configuration');
-
-const ldapConfig = {
-  url: config.ldapUrl,
-  baseDN: config.ldapBaseDN,
-  username: config.ldapUsername,
-  password: config.ldapPassword,
-  attributes: {
-    user: config.adUserProperties.split(',')
-  }
-};
-
-let qryOpts = {
-  filter: config.ldapQueryFilter,
-  baseDN: config.ldapQueryBaseDN
-};
 
 /**
  * Connect to AD via LDAP, Get filtered users.
@@ -29,7 +13,6 @@ class LdapLoader {
    * @constructor
    */
   constructor() {
-    this.ad = new ActiveDirectory(ldapConfig);  // connect to AD with the current config.
     this.client = new LdapClient();
   }
 
@@ -38,26 +21,31 @@ class LdapLoader {
    * @returns {Array<Object>} Array represents a list of user objects
    */
   async getUsers() {
-    return new Promise(async (res, rej) => {
       try {
         const mongo = new Mongo();
 
-        let result = await this.ad.findUsers(qryOpts, false);
-        //if (!result || result.length == 0) throw new Error('No users found.');
+        let qryOpts = {
+          filter: config.ldapQueryFilter,
+          scope: 'sub',
+          paged: {
+            pageSize: Number(config.ldapPageSize),
+            pagePause: false
+          }
+        };
+
+        let result = await this.client.search(config.ldapQueryBaseDN, qryOpts);
 
         const resultSize = result.length;
 
         while (result.length > 0) {
           let u = result.pop();
-          mongo.upsertAdUser(u.sAMAccountName, u);
+          let _ = mongo.upsertAdUser(u.sAMAccountName, u);
         }
 
-        res({ resultSize, endSize: result.length });
+        return { resultSize, endSize: result.length };
       } catch (err) {
         console.error(err);
-        rej("Caught error");
       }
-    });
   }
 
   async setUsers(users) {
