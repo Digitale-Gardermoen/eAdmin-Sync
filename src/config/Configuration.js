@@ -24,6 +24,7 @@ class Configuration {
     this.config.ldapPassword = process.env.LDAP_PASSWORD;
     this.config.ldapQueryBaseDN = process.env.LDAP_QUERY_OPTS_BASEDN;
     this.config.ldapQueryFilter = process.env.LDAP_QUERY_FILTER;
+    this.config.ldapPageSize = process.env.LDAP_QUERY_PAGESIZE;
     this.config.adUserProperties = process.env.ADUSERPROPERTIES;
   }
 }
