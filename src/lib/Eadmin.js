@@ -2,13 +2,15 @@
 const sql = require('mssql');
 const Mongo = require('./Mongo');
 const config = require('../config/Configuration');
-const EadminTable = require('../models/EadminSql.js');
 
 const sqlConfig = {
   user: config.sqlUser,
   password: config.sqlPassword,
   server: config.sqlServer,
-  database: config.sqlDatabase
+  database: config.sqlDatabase,
+  options: {
+    enableArithAbort: false
+  }
 }
 
 class EadminLoader {
@@ -23,7 +25,7 @@ class EadminLoader {
 
         while (result.recordset.length > 0) {
           let u = result.recordset.pop();
-          mongo.upsertEadminUser(u.sLoginID, u);
+          let _ = mongo.upsertEadminUser(u.sLoginID, u);
         }
 
         res({ resultSize, endSize: result.recordset.length });
