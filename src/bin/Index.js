@@ -3,7 +3,7 @@ const getDateString = require('../components/DateString');
 const Cron = require('../lib/Cron');
 const Scheduler = require('../api/Scheduler');
 
-console.log(getDateString(), '- Running procon-etl');
+console.log(getDateString(), '- Running eadmin-sync');
 
 const cron = new Cron();
 const scheduler = new Scheduler();
