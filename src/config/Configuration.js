@@ -5,12 +5,15 @@ class Configuration {
   constructor() {
     this.config = {};
 
+    this.config.environment = process.env.ENVIRONMENT;
+    this.config.logLevel = process.env.LOGLEVEL | 2;
+
     this.config.sqlUser = process.env.SQLUSERNAME;
     this.config.sqlPassword = process.env.SQLPASSWORD;
     this.config.sqlServer = process.env.SQLSERVER;
     this.config.sqlDatabase = process.env.SQLDATABASE;
     this.config.sqlTable = process.env.SQLTABLE;
-    this.config.sqlTimeout = process.env.SQLTIMEOUT;
+    this.config.sqlTimeout = process.env.SQLTIMEOUT | 15000;
 
     this.config.schedule = process.env.CRONSCHEDULE;
 

@@ -11,15 +11,17 @@ class Compare {
    */
   async process(eadminUsers, adUsers) {
     const eadminClone = JSON.parse(JSON.stringify(eadminUsers));
-    const adClone =     JSON.parse(JSON.stringify(adUsers));
+    const adClone = JSON.parse(JSON.stringify(adUsers));
 
     let diff = { "ActiveDirectory": {}, "Eadmin": {} };
     let warn = {};
 
+    console.info('[EA] Comparing users to AD');
     while (eadminUsers.length > 0) {
       let user = eadminUsers.pop();
+      console.debug('Checking user:', user.sLoginID);
 
-      let target = adClone.find(obj => { return obj.sAMAccountName === user.sLoginID});
+      let target = adClone.find(obj => { return obj.sAMAccountName === user.sLoginID });
       if (!target) {
         warn[user.sLoginID] = "Target user was not found in Active Directory";
         continue;
@@ -28,13 +30,18 @@ class Compare {
       let change = this.checkUser(user, target, "Eadmin");
 
       // Save changes to be done in the diff object. As changes will be done in another method.
-      if (Object.keys(change).length != 0) diff["Eadmin"][target.dn] = change;
+      if (Object.keys(change).length != 0) {
+        console.debug('Found discrepancy:', JSON.stringify(change));
+        diff["Eadmin"][target.dn] = change;
+      }
     }
 
+    console.info('[AD] Comparing users to Eadmin');
     while (adUsers.length > 0) {
       let user = adUsers.pop();
+      console.debug('Checking user:', user.sAMAccountName);
 
-      let target = eadminClone.find(obj => { return obj.sLoginID === user.sAMAccountName});
+      let target = eadminClone.find(obj => { return obj.sLoginID === user.sAMAccountName });
       if (!target) {
         warn[user.sAMAccountName] = "Target user was not found in Eadmin";
         continue;
@@ -43,7 +50,10 @@ class Compare {
       let change = this.checkUser(user, target, "ActiveDirectory");
 
       // Save changes to be done in the diff object. As changes will be done in another method.
-      if (Object.keys(change).length != 0) diff["ActiveDirectory"][user.sAMAccountName] = change;
+      if (Object.keys(change).length != 0) {
+        console.debug('Found discrepancy:', JSON.stringify(change));
+        diff["ActiveDirectory"][user.sAMAccountName] = change;
+      }
     };
 
     return { diff, warn };

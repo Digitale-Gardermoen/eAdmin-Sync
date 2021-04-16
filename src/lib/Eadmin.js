@@ -29,6 +29,7 @@ class EadminLoader {
 
     Object.keys(users).forEach(async (user) => {
       try {
+        console.debug('Creating statement for user:', user);
         let statement = "";
         statement += `UPDATE ${config.sqlTable} `;
         statement += `SET`;
@@ -40,8 +41,11 @@ class EadminLoader {
         statement = statement.slice(0, -1);
         statement += ` WHERE sLoginID = '${user}'`;
 
-        const result = await pool.request().query(statement);
-        console.log(result);
+        console.debug('Got statement:', statement);
+
+        if (config.environment == 'prod') {
+          pool.request().query(statement);
+        }
       } catch (err) {
         console.error(err);
       }

@@ -40,8 +40,12 @@ class LdapLoader {
   async setUsers(users) {
     Object.keys(users).forEach(async (user) => {
       try {
+        console.debug('Creating LDAP change for user:', user);
         const change = this.client.createChange('replace', users[user]);
-        this.client.modify(user, change);
+        console.debug('Created change object:', change.json);
+        if (config.environment == 'prod') {
+          this.client.modify(user, change);
+        }
       } catch (err) {
         console.error(err);
       }
