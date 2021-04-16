@@ -33,10 +33,10 @@ class LdapLoader {
         let base = config.ldapQueryBaseDN.split(';');
         let users = [];
         for (let i = 0; i < base.length; i++) {
-          const res = await this.client.search(config.ldapQueryBaseDN, qryOpts);
+          const res = await this.client.search(base[i], qryOpts);
           users = users.concat(res);
         }
-        
+
         return users;
       } catch (err) {
         console.error(err);
