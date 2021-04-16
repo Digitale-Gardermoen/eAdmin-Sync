@@ -30,8 +30,14 @@ class LdapLoader {
           }
         };
 
-        const res = await this.client.search(config.ldapQueryBaseDN, qryOpts);
-        return res;
+        let base = config.ldapQueryBaseDN.split(';');
+        let users = [];
+        for (let i = 0; i < base.length; i++) {
+          const res = await this.client.search(config.ldapQueryBaseDN, qryOpts);
+          users = users.concat(res);
+        }
+        
+        return users;
       } catch (err) {
         console.error(err);
       }
