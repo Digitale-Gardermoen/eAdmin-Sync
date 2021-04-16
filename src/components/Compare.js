@@ -19,7 +19,7 @@ class Compare {
     console.info('[EA] Comparing users to AD');
     while (eadminUsers.length > 0) {
       let user = eadminUsers.pop();
-      console.debug('Checking user:', user.sLoginID);
+      console.debug('[EA] Checking user:', user.sLoginID);
 
       let target = adClone.find(obj => { return obj.sAMAccountName === user.sLoginID });
       if (!target) {
@@ -31,7 +31,7 @@ class Compare {
 
       // Save changes to be done in the diff object. As changes will be done in another method.
       if (Object.keys(change).length != 0) {
-        console.debug('Found discrepancy:', JSON.stringify(change));
+        console.debug('[EA] Found discrepancy:', JSON.stringify(change));
         diff["Eadmin"][target.dn] = change;
       }
     }
@@ -39,7 +39,7 @@ class Compare {
     console.info('[AD] Comparing users to Eadmin');
     while (adUsers.length > 0) {
       let user = adUsers.pop();
-      console.debug('Checking user:', user.sAMAccountName);
+      console.debug('[AD] Checking user:', user.sAMAccountName);
 
       let target = eadminClone.find(obj => { return obj.sLoginID === user.sAMAccountName });
       if (!target) {
@@ -51,7 +51,7 @@ class Compare {
 
       // Save changes to be done in the diff object. As changes will be done in another method.
       if (Object.keys(change).length != 0) {
-        console.debug('Found discrepancy:', JSON.stringify(change));
+        console.debug('[AD] Found discrepancy:', JSON.stringify(change));
         diff["ActiveDirectory"][user.sAMAccountName] = change;
       }
     };
