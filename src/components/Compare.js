@@ -15,14 +15,19 @@ class Compare {
    */
   async process() {
     const eadminUsers = await this.db.fetchEadminUsers();
-    const ADUsers = await this.db.fetchADUsers();
+    const adUsers =     await this.db.fetchADUsers();
+
+    const eadminClone = JSON.parse(JSON.stringify(eadminUsers));
+    const adClone =     JSON.parse(JSON.stringify(adUsers));
+
     let diff = { "ActiveDirectory": {}, "Eadmin": {} };
     let warn = {};
 
     while (eadminUsers.length > 0) {
       let user = eadminUsers.pop()._doc;
 
-      let target = await this.db.findADUser(user.sLoginID);
+      //let target = await this.db.findADUser(user.sLoginID);
+      let target = adClone.find(obj => { return obj.sAMAccountName === user.sLoginID});
       if (!target) {
         warn[user.sLoginID] = "Target user was not found in Active Directory";
         continue;
@@ -38,10 +43,11 @@ class Compare {
       target = "";
     }
 
-    while (ADUsers.length > 0) {
-      let user = ADUsers.pop()._doc;
+    while (adUsers.length > 0) {
+      let user = adUsers.pop()._doc;
 
-      let target = await this.db.findEadminUser(user.sAMAccountName);
+      //let target = await this.db.findEadminUser(user.sAMAccountName);
+      let target = eadminClone.find(obj => { return obj.sLoginID === user.sAMAccountName});
       if (!target) {
         warn[user.sAMAccountName] = "Target user was not found in Eadmin";
         continue;
