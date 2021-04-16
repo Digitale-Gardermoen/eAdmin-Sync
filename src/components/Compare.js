@@ -1,4 +1,3 @@
-const Mongo = require('../lib/Mongo');
 const translateFields = require('../models/TranslateFields');
 const syncConfig = require('../config/SyncConfig.json');
 
@@ -7,16 +6,10 @@ const syncConfig = require('../config/SyncConfig.json');
  * @class
  */
 class Compare {
-  constructor() {
-    this.db = new Mongo();
-  }
   /**
    * 
    */
-  async process() {
-    const eadminUsers = await this.db.fetchEadminUsers();
-    const adUsers =     await this.db.fetchADUsers();
-
+  async process(eadminUsers, adUsers) {
     const eadminClone = JSON.parse(JSON.stringify(eadminUsers));
     const adClone =     JSON.parse(JSON.stringify(adUsers));
 
@@ -24,9 +17,8 @@ class Compare {
     let warn = {};
 
     while (eadminUsers.length > 0) {
-      let user = eadminUsers.pop()._doc;
+      let user = eadminUsers.pop();
 
-      //let target = await this.db.findADUser(user.sLoginID);
       let target = adClone.find(obj => { return obj.sAMAccountName === user.sLoginID});
       if (!target) {
         warn[user.sLoginID] = "Target user was not found in Active Directory";
@@ -37,16 +29,11 @@ class Compare {
 
       // Save changes to be done in the diff object. As changes will be done in another method.
       if (Object.keys(change).length != 0) diff["Eadmin"][target.dn] = change;
-
-      // clear values
-      user = "";
-      target = "";
     }
 
     while (adUsers.length > 0) {
-      let user = adUsers.pop()._doc;
+      let user = adUsers.pop();
 
-      //let target = await this.db.findEadminUser(user.sAMAccountName);
       let target = eadminClone.find(obj => { return obj.sLoginID === user.sAMAccountName});
       if (!target) {
         warn[user.sAMAccountName] = "Target user was not found in Eadmin";
@@ -57,10 +44,6 @@ class Compare {
 
       // Save changes to be done in the diff object. As changes will be done in another method.
       if (Object.keys(change).length != 0) diff["ActiveDirectory"][user.sAMAccountName] = change;
-
-      // clear values
-      user = "";
-      target = "";
     };
 
     return { diff, warn };

@@ -20,13 +20,10 @@ class Scheduler {
       const eadmin = new Eadmin();
       const compare = new Compare();
 
-      const adUsers = await ad.getUsers();
       const eadminUsers = await eadmin.getUsers();
+      const adUsers = await ad.getUsers();
 
-      console.log(getDateString(), '- [AD] Got:', adUsers.resultSize, ', missing:', adUsers.endSize);
-      console.log(getDateString(), '- [EA] Got:', eadminUsers.resultSize, ', missing:', eadminUsers.endSize);
-
-      const { diff, warn } = await compare.process();
+      const { diff, warn } = await compare.process(eadminUsers, adUsers);
       console.log(diff, warn);
 
       eadmin.setUsers(diff["ActiveDirectory"]);

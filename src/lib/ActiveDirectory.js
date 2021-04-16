@@ -1,6 +1,5 @@
 'use strict';
 const LdapClient = require('../api/LdapClient');
-const Mongo = require('./Mongo');
 const config = require('../config/Configuration');
 
 /**
@@ -22,8 +21,6 @@ class LdapLoader {
    */
   async getUsers() {
       try {
-        const mongo = new Mongo();
-
         let qryOpts = {
           filter: config.ldapQueryFilter,
           scope: 'sub',
@@ -33,16 +30,8 @@ class LdapLoader {
           }
         };
 
-        let result = await this.client.search(config.ldapQueryBaseDN, qryOpts);
-
-        const resultSize = result.length;
-
-        while (result.length > 0) {
-          let u = result.pop();
-          let _ = mongo.upsertAdUser(u.sAMAccountName, u);
-        }
-
-        return { resultSize, endSize: result.length };
+        const res = await this.client.search(config.ldapQueryBaseDN, qryOpts);
+        return res;
       } catch (err) {
         console.error(err);
       }
