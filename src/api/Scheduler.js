@@ -22,8 +22,8 @@ class Scheduler {
       console.info('Fetching users...')
       const eadminUsers = await eadmin.getUsers();
       const adUsers = await ad.getUsers();
-      console.info('[EA] count:', eadminUsers.length);
-      console.info('[AD] count:', adUsers.length);
+      console.info('[EA] Count:', eadminUsers.length);
+      console.info('[AD] Count:', adUsers.length);
 
       console.info('Processing users...');
       const { diff, warn } = await compare.process(eadminUsers, adUsers);
@@ -31,8 +31,8 @@ class Scheduler {
         console.info('Found no changes, returning');
         return;
       }
-      console.info('[EA] count:', Object.keys(diff["ActiveDirectory"]).length);
-      console.info('[AD] count:', Object.keys(diff["Eadmin"]).length);
+      console.info('[EA] Count:', Object.keys(diff["ActiveDirectory"]).length);
+      console.info('[AD] Count:', Object.keys(diff["Eadmin"]).length);
 
       console.info('Writing changes');
       eadmin.setUsers(diff["ActiveDirectory"]);
