@@ -1,3 +1,8 @@
+/**
+ * @file Index.js
+ * @description
+ * Entry point for the solution, starts the cron job.
+ */
 'use strict';
 require('../lib/Logging');
 const Cron = require('../lib/Cron');

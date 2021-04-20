@@ -45,6 +45,10 @@ class LdapLoader {
       }
   }
 
+  /**
+   * Set the users attributes to found changes via LDAP.
+   * @param {Array<Object>} users - Users with the list of attributes to change.
+   */
   async setUsers(users) {
     Object.keys(users).forEach(async (user) => {
       try {
