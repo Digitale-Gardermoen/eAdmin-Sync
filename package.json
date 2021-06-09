@@ -9,9 +9,9 @@
   "author": "Kim Nerli",
   "license": "MIT",
   "dependencies": {
+    "better-logging": "^4.5.0",
     "dotenv": "^8.2.0",
     "ldapjs": "^2.2.4",
-    "mongoose": "^5.12.3",
     "mssql": "^6.3.1",
     "node-cron": "^3.0.0",
     "tui-jsdoc-template": "^1.2.2"

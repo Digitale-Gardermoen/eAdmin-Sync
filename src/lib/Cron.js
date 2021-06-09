@@ -1,7 +1,6 @@
 'use strict';
 const cron = require('node-cron');
 const config = require('../config/Configuration');
-const getDateString = require('../components/DateString');
 
 /**
  * Helper for the node-cron package.
@@ -23,7 +22,7 @@ class Cron {
    * @param {Function} func - A function the cron service should run.
    */
   run(func) {
-    console.log(getDateString(), '- Got Schedule:', this.schedule);
+    console.info('Got Schedule:', this.schedule);
     cron.schedule(this.schedule, () => {
       func();
     });

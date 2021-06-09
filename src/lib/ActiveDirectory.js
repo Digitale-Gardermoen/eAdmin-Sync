@@ -1,6 +1,5 @@
 'use strict';
 const LdapClient = require('../api/LdapClient');
-const Mongo = require('./Mongo');
 const config = require('../config/Configuration');
 
 /**
@@ -22,8 +21,6 @@ class LdapLoader {
    */
   async getUsers() {
       try {
-        const mongo = new Mongo();
-
         let qryOpts = {
           filter: config.ldapQueryFilter,
           scope: 'sub',
@@ -33,26 +30,34 @@ class LdapLoader {
           }
         };
 
-        let result = await this.client.search(config.ldapQueryBaseDN, qryOpts);
-
-        const resultSize = result.length;
-
-        while (result.length > 0) {
-          let u = result.pop();
-          let _ = mongo.upsertAdUser(u.sAMAccountName, u);
+        let base = config.ldapQueryBaseDN.split(';');
+        let users = [];
+        for (let i = 0; i < base.length; i++) {
+          console.debug('[AD] Searching LDAP with base:', base[i]);
+          const res = await this.client.search(base[i], qryOpts);
+          console.debug('[AD] Found', res.length, 'users');
+          users = users.concat(res);
         }
 
-        return { resultSize, endSize: result.length };
+        return users;
       } catch (err) {
         console.error(err);
       }
   }
 
+  /**
+   * Set the users attributes to found changes via LDAP.
+   * @param {Array<Object>} users - Users with the list of attributes to change.
+   */
   async setUsers(users) {
     Object.keys(users).forEach(async (user) => {
       try {
+        console.debug('[AD] Creating LDAP change for user:', user);
         const change = this.client.createChange('replace', users[user]);
-        this.client.modify(user, change);
+        console.debug('[AD] Created change object:', change.json);
+        if (config.environment == 'prod') {
+          this.client.modify(user, change);
+        }
       } catch (err) {
         console.error(err);
       }

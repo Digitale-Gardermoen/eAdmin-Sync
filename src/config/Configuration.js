@@ -5,16 +5,15 @@ class Configuration {
   constructor() {
     this.config = {};
 
-    this.config.mongooseHost = process.env.MONGOOSE_HOST;
-    this.config.mongooseUsername = process.env.MONGOOSE_USERNAME;
-    this.config.mongoosePassword = process.env.MONGOOSE_PASSWORD;
-    this.config.mongooseDbname = process.env.MONGOOSE_DBNAME;
+    this.config.environment = process.env.ENVIRONMENT || dev;
+    this.config.logLevel = Number(process.env.LOGLEVEL) || 2;
 
     this.config.sqlUser = process.env.SQLUSERNAME;
     this.config.sqlPassword = process.env.SQLPASSWORD;
     this.config.sqlServer = process.env.SQLSERVER;
     this.config.sqlDatabase = process.env.SQLDATABASE;
     this.config.sqlTable = process.env.SQLTABLE;
+    this.config.sqlTimeout = Number(process.env.SQLTIMEOUT) || 15000;
 
     this.config.schedule = process.env.CRONSCHEDULE;
 

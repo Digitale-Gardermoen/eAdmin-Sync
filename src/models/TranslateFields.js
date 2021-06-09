@@ -1,3 +1,7 @@
+/**
+ * What fields should be translated to and from both systems.
+ * @var
+ */
 const translateFields = {
   // eAdmin fields
   'sLoginID': 'sAMAccountName',
