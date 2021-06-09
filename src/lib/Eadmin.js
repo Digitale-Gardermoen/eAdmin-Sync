@@ -47,7 +47,7 @@ class EadminLoader {
 
     Object.keys(users).forEach(async (user) => {
       try {
-        console.debug('[EA] Creating statement for user:', user);
+        console.info('[EA] Creating statement for user:', user);
         let statement = "";
         statement += `UPDATE ${config.sqlTable} `;
         statement += `SET`;

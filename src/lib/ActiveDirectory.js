@@ -52,7 +52,7 @@ class LdapLoader {
   async setUsers(users) {
     Object.keys(users).forEach(async (user) => {
       try {
-        console.debug('[AD] Creating LDAP change for user:', user);
+        console.info('[AD] Creating LDAP change for user:', user);
         const change = this.client.createChange('replace', users[user]);
         console.debug('[AD] Created change object:', change.json);
         if (config.environment == 'prod') {
