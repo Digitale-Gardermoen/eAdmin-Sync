@@ -6,8 +6,5 @@
     "include": [
       "src/"
     ]
-  },
-  "opts": {
-    "template": "node_modules/tui-jsdoc-template"
   }
 }
