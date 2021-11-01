@@ -12,7 +12,8 @@ class Configuration {
     this.config.sqlPassword = process.env.SQLPASSWORD;
     this.config.sqlServer = process.env.SQLSERVER;
     this.config.sqlDatabase = process.env.SQLDATABASE;
-    this.config.sqlTable = process.env.SQLTABLE;
+    this.config.sqlTableOrView = process.env.SQLTABLEORVIEW;
+    this.config.sqlUpdateTable = process.env.SQLUPDATETABLE;
     this.config.sqlTimeout = Number(process.env.SQLTIMEOUT) || 15000;
 
     this.config.schedule = process.env.CRONSCHEDULE;

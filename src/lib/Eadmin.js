@@ -29,8 +29,8 @@ class EadminLoader {
   async getUsers() {
     try {
       const pool = await sql.connect(sqlConfig);
-      console.debug('[EA] Querying', config.sqlDatabase, 'with statement: SELECT * FROM', config.sqlTable)
-      const res = await pool.request().query('SELECT * FROM ' + config.sqlTable);
+      console.debug('[EA] Querying', config.sqlDatabase, 'with statement: SELECT * FROM', config.sqlTableOrView)
+      const res = await pool.request().query('SELECT * FROM ' + config.sqlTableOrView);
       console.debug('[EA] Found', res.recordset.length, 'users');
       return res.recordset;
     } catch (err) {
@@ -44,12 +44,13 @@ class EadminLoader {
    */
   async setUsers(users) {
     const pool = await sql.connect(sqlConfig);
+    if (!config.sqlUpdateTable) config.sqlUpdateTable = config.sqlTableOrView;
 
     Object.keys(users).forEach(async (user) => {
       try {
         console.info('[EA] Creating statement for user:', user);
         let statement = "";
-        statement += `UPDATE ${config.sqlTable} `;
+        statement += `UPDATE ${config.sqlUpdateTable} `;
         statement += `SET`;
 
         Object.keys(users[user]).forEach((field) => {
