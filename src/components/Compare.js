@@ -89,20 +89,28 @@ class Compare {
     const change = {};
     // This loop checks for changed data on the user
     syncConfig[base].fields.forEach((field) => {
-      // Check if the value is empty or blank space.
-      // This also needs to REMOVE any value if its changed on a user.
+      /*
+       * Check if the value is empty or blank space.
+       * This also needs to REMOVE any value if its changed on a user.
+       */
       if (typeof user[field] !== 'undefined') {
         if (!user[field]) {
           if (target[translateFields[field]]) {
-            // queue change for replacing with a blank value.
-            change[translateFields[field]] = user[field];
+            /*
+             * Queue change for replacing with a blank value.
+             * Set this to null to make the replace change actually remove the value.
+             * If its an empty string the modify action will error.
+             */ 
+            change[translateFields[field]] = null;
           }
           return;
         }
       }
 
-      // Check if the target field is empty, as it is already confirmed that the user field is not empty above.
-      // or check if the target field is not the same as the user field.
+      /*
+       * Check if the target field is empty, as it is already confirmed that the user field is not empty above.
+       * or check if the target field is not the same as the user field.
+       */
       if (typeof user[field] !== 'undefined') {
         if (!target[translateFields[field]] | target[translateFields[field]] != user[field]) {
           change[translateFields[field]] = user[field];
