@@ -9,12 +9,14 @@ const translateFields = {
   'sEMail': 'mail',
   'sPhone1': 'telephoneNumber',
   'sPhone2': 'mobile',
+  'sCustomer': 'department',
   // AD fields
   'sAMAccountName': 'sLoginID',
   'displayName': 'sName',
   'mail': 'sEMail',
   'telephoneNumber': 'sPhone1',
-  'mobile': 'sPhone2'
+  'mobile': 'sPhone2',
+  'department': 'sCustomer'
 };
 
 module.exports = translateFields;
