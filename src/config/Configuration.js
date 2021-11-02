@@ -15,6 +15,7 @@ class Configuration {
     this.config.sqlTableOrView = process.env.SQLTABLEORVIEW;
     this.config.sqlUpdateTable = process.env.SQLUPDATETABLE;
     this.config.sqlTimeout = Number(process.env.SQLTIMEOUT) || 15000;
+    this.config.sqlUseEncrypt = process.env.SQLUSEENCRYPT || true;
 
     this.config.schedule = process.env.CRONSCHEDULE;
 

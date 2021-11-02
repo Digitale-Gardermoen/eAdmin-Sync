@@ -9,7 +9,8 @@ const sqlConfig = {
   server: config.sqlServer,
   database: config.sqlDatabase,
   options: {
-    enableArithAbort: false
+    enableArithAbort: false,
+    encrypt: config.sqlUseEncrypt
   },
   connectionTimeout: config.sqlTimeout
 }
