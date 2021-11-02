@@ -10,7 +10,8 @@ const sqlConfig = {
   database: config.sqlDatabase,
   options: {
     enableArithAbort: false,
-    encrypt: config.sqlUseEncrypt
+    encrypt: config.sqlUseEncrypt,
+    trustServerCertificate: config.sqlTrustCertificate
   },
   connectionTimeout: config.sqlTimeout
 }
