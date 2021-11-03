@@ -59,10 +59,26 @@ class LdapClient {
    * @returns {ldap.Change} - Represents a change object created by ldapjs.
    */
   createChange(operation, modification) {
-    return new ldap.Change({
-      operation,
-      modification
-    });
+    if (Object.keys(modification).length > 1) {
+      let change = [];
+      Object.keys(modification).forEach(key => {
+        let mod = {};
+        mod[key] = modification[key];
+
+        change += new ldap.Change({
+          operation,
+          mod
+        });
+      });
+      
+      return change;
+    }
+    else {
+      return new ldap.Change({
+        operation,
+        modification
+      });
+    }
   }
 
   /**
