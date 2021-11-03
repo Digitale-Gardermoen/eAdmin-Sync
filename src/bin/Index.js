@@ -34,3 +34,11 @@ process.on('SIGINT', async function () {
     process.exit();
   }
 });
+
+process.on('unhandledRejection', function(reason, p){
+  console.error("Possibly Unhandled Rejection at: Promise ", p, " reason: ", reason);
+});
+
+process.on('uncaughtException', function (err) {
+console.error('Unhandled exception found: ' + err.stack);
+});
