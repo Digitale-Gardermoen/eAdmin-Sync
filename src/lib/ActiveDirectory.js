@@ -54,7 +54,10 @@ class LdapLoader {
       try {
         console.info('[AD] Creating LDAP change for user:', user);
         const change = this.client.createChange('replace', users[user]);
-        console.debug('[AD] Created change object:', change.json);
+        if (Array.isArray(change)) { 
+          change.forEach(obj => console.debug('[AD] Created change object:', obj.json));
+        }
+        else console.debug('[AD] Created change object:', change.json);
         if (config.environment == 'prod') {
           this.client.modify(user, change);
         }
