@@ -89,6 +89,7 @@ class Compare {
     const change = {};
     // This loop checks for changed data on the user
     syncConfig[base].fields.forEach((field) => {
+      if (Object.keys(change).length != 0) return;
       /*
        * Check if the value is empty or blank space.
        * This also needs to REMOVE any value if its changed on a user.
